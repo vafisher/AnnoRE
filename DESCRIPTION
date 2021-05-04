@@ -1,0 +1,10 @@
+Package: AnnoRE
+Type: Package
+Title: Random Effects Estimation for GWAS Fine Mapping with Functional Annotations
+Version: 0.1.0
+Author: Virginia Fisher
+Maintainer: Virginia Fisher <vafisher@bu.edu>
+Description: Provides functions for fine mapping analysis of trait-associated loci, incorporating patterns of linkage disequilibrium and predicted effect distributions from functional annotation.
+License: MIT
+Encoding: UTF-8
+LazyData: true
