@@ -23,27 +23,32 @@ REestimate <- function(loc_summary_df, trait_h2, loc_ld_matrix = NULL, loc_ld_fi
                  dim(loc_ld_matrix)[1] == nrow(loc_summary_df))) {
       return("size of ld matrix does not match summary data frame")
     }
-  } else { #read LD from vcftools output file and convert to matrix
+  } else { #read LD from vcftools output file and convert to matrix; loc_ld_file = "inst/data/rs3736485.1000G.loc.hap.ld"
     ld_long<-read.table(loc_ld_file, header=T, as.is=T)
-    LDmat<-reshape(ld_long, direction="wide",
+    loc_ld_matrix<-reshape(ld_long, direction="wide",
                    v.names=c("R.2"),idvar=c("POS1"),
                    timevar=c("POS2"),
                    drop=c("CHR","D","Dprime"))
-    LDmat<-rbind(cbind(NA,LDmat[,-(1:2)]),NA)
-    LDmat[lower.tri(LDmat)]<-t(LDmat)[lower.tri(LDmat)]
-    diag(LDmat)<-1
+    loc_ld_matrix <- rbind(cbind(NA,loc_ld_matrix[,-(1:2)]),NA)
+    loc_ld_matrix[lower.tri(loc_ld_matrix)]<-t(loc_ld_matrix)[lower.tri(loc_ld_matrix)]
+    diag(loc_ld_matrix)<-1
+    loc_ld_matrix <- as.matrix(loc_ld_matrix)
   }
 
   loc_df <- loc_summary_df %>%
+    filter(!is.na(Freq1)) %>%
     select(all_of(input_vars)) %>%
     mutate(Z = b/se,
            D = 2*N*Freq1*(1-Freq1),
            sig2R = D*(varVbeta*(N-1) + b^2),
-           h2 = (2*b^2*Freq1*(1-Freq1))/median(sig2R),
+           h2 = (2*b^2*Freq1*(1-Freq1))/median(sig2R, na.rm = T),
            D_std = sqrt((2*N*Freq1*(1-Freq1))/sig2R))
+  
+  loc_snp_idx <- which(loc_df$SNP %in% loc_summary_df$SNP)
+  loc_ld_matrix <- loc_ld_matrix[loc_snp_idx, loc_snp_idx]
 
   gwa_h2<-trait_h2/1e6
-  loc_fac<-mean(loc_df$h2)/gwa_h2
+  loc_fac<-mean(loc_df$h2, na.rm = T)/gwa_h2
 
   G.vec<-loc_df$Vbeta*loc_fac
   G.inv<-diag(1/G.vec)

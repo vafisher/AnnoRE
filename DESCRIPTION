@@ -8,3 +8,7 @@ Description: Provides functions for fine mapping analysis of trait-associated lo
 License: MIT
 Encoding: UTF-8
 LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

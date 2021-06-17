@@ -1,0 +1,41 @@
+---
+title: "AnnoRE-finemapping"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{AnnoRE-finemapping}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(AnnoRE)
+library(dplyr)
+```
+
+```{r}
+
+#loc<-read.table(paste("../inst/data/",snp,".loc.annot.txt",sep=""),header=T,as.is=T,sep="\t")
+
+bmi.loc<-read.table("../inst/data/rs3736485.loc.sumstats.txt",
+                    header=T,as.is=T) %>%
+  mutate(Freq1 = Freq1.Hapmap)
+
+#ldsc<-read.table("../inst/data/BMI_baseline_1kg.results",header=T, as.is=T, sep="\t")
+
+```
+
+```{r}
+REestimate(loc_summary_df = bmi.loc, 
+           trait_h2 = 0.13, 
+           loc_ld_matrix = NULL, 
+           loc_ld_file = "../inst/data/rs3736485.1000G.loc.hap.ld")
+```
+
+
