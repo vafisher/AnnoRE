@@ -4,18 +4,26 @@
 \alias{REestimate}
 \title{Estimate best linear unbiased predictor of SNP random effects in a GWAS locus}
 \usage{
-REestimate(loc_summary_df, trait_h2, loc_ld_matrix = NULL, loc_ld_file = NULL)
+REestimate(
+  loc_summary_df,
+  trait_h2,
+  nominal_p_filter = 0.05,
+  loc_ld_matrix = NULL,
+  loc_ld_file = NULL
+)
 }
 \arguments{
 \item{loc_summary_df}{A data frame containing summary statistics for the locus.
-Columns b, se, N, Freq1, Vbeta, varVbeta are required.}
+Columns SNP, CHR, BP, b, se, N, Freq1, Vbeta, varVbeta are required.}
 
-\item{loc_ld_matrix}{A numeric matrix containing linkage disequilibrium $R^2$ for all SNPs in loc_summary_df}
+\item{trait_h2}{A number between 0 and 1 representing total trait heritability}
+
+\item{nominal_p_filter}{A number between 0 and 1 representing p-value threshold for consideration in fine mapping.}
+
+\item{loc_ld_matrix}{A numeric matrix containing linkage disequilibrium $R^2$ for all SNPs in loc_summary_df.}
 
 \item{loc_ld_file}{A file path for the VCFtools output containing LD for all SNPs in loc_summary_df.
 Only used if loc_ld_matrix is NULL.}
-
-\item{trait_h0}{A number between 0 and 1 representing total trait heritability}
 }
 \value{
 A data frame matching loc_summary_df with columns containing AnnoRE results appended.
