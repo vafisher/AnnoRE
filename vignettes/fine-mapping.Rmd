@@ -1,0 +1,36 @@
+---
+title: "AnnoRE-finemapping"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{AnnoRE-finemapping}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+library(AnnoRE)
+
+locus_summary <- annotateREvariance(gwas_locus = locus_gwas_stats, 
+                                    annotation = locus_annotation, 
+                                    h2partition = ldsc_h2partition)
+```
+
+```{r}
+fine_mapping <- REestimate(loc_summary_df = locus_summary, 
+                           trait_h2 = 0.13, 
+                           loc_ld_matrix = NULL, 
+                           loc_ld_file = system.file("extdata", "locus.1000G.loc.hap.ld", package = "AnnoRE"))
+                             #"../inst/extdata/rs3736485.1000G.loc.hap.ld")
+head(fine_mapping)
+```
+
+
+
+
